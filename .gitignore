@@ -7,12 +7,12 @@
 /bazel-out
 
 # Node
-/frontend/node_modules
-/frontend/dist
-/frontend/.angular
-/node_modules
+/apps/frontend/node_modules
+/apps/frontend/dist
+/apps/frontend/.angular
 /apps/api/node_modules
 /apps/api/dist
+/node_modules
 npm-debug.log
 yarn-error.log
 
