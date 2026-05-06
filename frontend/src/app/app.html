@@ -1,0 +1,28 @@
+<div class="layout">
+  <aside class="sidebar">
+    <div class="brand">
+      <h2>YNR Local</h2>
+      <p class="muted">Yamunanagar</p>
+    </div>
+    <nav class="menu-section">
+      <h4>Customer</h4>
+      <a routerLink="/" [routerLinkActiveOptions]="{ exact: true }" routerLinkActive="active-link">Home</a>
+      <a routerLink="/vendors/v1" routerLinkActive="active-link">Vendor detail</a>
+      <a routerLink="/profile" routerLinkActive="active-link">My profile</a>
+    </nav>
+    <nav class="menu-section menu-section--vendor">
+      <h4>Vendor</h4>
+      @if (!isLoggedIn()) {
+        <a routerLink="/login" routerLinkActive="active-link">Login / OTP</a>
+      }
+      <a routerLink="/dashboard" routerLinkActive="active-link">Dashboard</a>
+      <a routerLink="/register" routerLinkActive="active-link">Register listing</a>
+      @if (isLoggedIn()) {
+        <button class="menu-link menu-link--logout" type="button" (click)="logout()">Logout</button>
+      }
+    </nav>
+  </aside>
+  <main class="content">
+    <router-outlet />
+  </main>
+</div>
