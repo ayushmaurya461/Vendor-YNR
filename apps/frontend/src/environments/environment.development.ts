@@ -1,4 +1,6 @@
+import { resolveApiUrl } from '../app/core/utils/api-url.util';
+
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:3000',
+  apiUrl: resolveApiUrl('http://localhost:3000'),
 };

@@ -54,6 +54,37 @@ ng e2e
 
 Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
 
+## Android (Capacitor)
+
+This app ships as a native Android project via [Capacitor](https://capacitorjs.com/).
+
+### Prerequisites
+
+- [Android Studio](https://developer.android.com/studio) with Android SDK
+- JDK 17+
+- API server running locally (`apps/api`, port 3000)
+
+### Build and run on emulator
+
+```bash
+cd apps/frontend
+npm run cap:run:android
+```
+
+Or open the project in Android Studio:
+
+```bash
+npm run cap:sync
+npm run cap:android
+```
+
+### API URL on device
+
+- **Android emulator**: API calls go to `http://10.0.2.2:3000` (maps to your machine’s `localhost`).
+- **Physical device**: use your computer’s LAN IP in `src/environments/environment.development.ts`, or add a dedicated build configuration.
+
+Ensure the API is reachable from the device and that `FRONTEND_ORIGIN` in `apps/api/.env` includes your web dev origin (Capacitor’s `https://localhost` is allowed in development automatically).
+
 ## Additional Resources
 
 For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.

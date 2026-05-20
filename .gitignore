@@ -10,6 +10,12 @@
 /apps/frontend/node_modules
 /apps/frontend/dist
 /apps/frontend/.angular
+# Capacitor Android — commit apps/frontend/android/; ignore build output only
+/apps/frontend/android/.gradle/
+/apps/frontend/android/app/build/
+/apps/frontend/android/build/
+/apps/frontend/android/local.properties
+/apps/frontend/android/captures/
 /apps/api/node_modules
 /apps/api/dist
 /apps/api/uploads
