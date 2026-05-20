@@ -20,31 +20,68 @@ export interface CategoryLetterGroup {
   standalone: true,
   styleUrl: './category-filter.component.css',
   template: `
-    <div class="category-filter">
-      <div
-        class="category-filter__panel"
-        [class.category-filter__panel--expanded]="expanded()"
-      >
-        <div class="category-filter__body">
-          @if (!expanded()) {
-            <div class="chips" animate.leave="chips-swap-leave">
+    <div class="category-filter" [class.category-filter--open]="expanded()">
+      @if (expanded()) {
+        <button
+          type="button"
+          class="category-filter__backdrop"
+          aria-label="Close categories"
+          (click)="closeExpanded()"
+        ></button>
+      }
+
+      <div class="category-filter__surface">
+        <div class="category-filter__bar" [class.category-filter__bar--concealed]="expanded()">
+          <div class="category-filter__body">
+            <div class="chips">
               @for (category of collapsedCategories(); track category.id) {
                 <button
                   class="chip"
                   [class.chip--active]="selected() === category.slug"
                   type="button"
+                  [tabindex]="expanded() ? -1 : 0"
                   (click)="select(category.slug)"
                 >
                   {{ category.label }}
                 </button>
               }
             </div>
-          } @else {
-            <div
-              class="category-filter__groups"
-              animate.enter="category-panel-enter"
-              animate.leave="category-panel-leave"
+          </div>
+
+          @if (hasMore() && !expanded()) {
+            <button
+              class="expand-btn"
+              type="button"
+              aria-expanded="false"
+              aria-label="Show all categories"
+              (click)="toggleExpanded()"
             >
+              <span class="expand-btn__icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="18" height="18" focusable="false">
+                  <path
+                    d="M6 9l6 6 6-6"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </span>
+              <span class="expand-btn__label">More</span>
+            </button>
+          }
+        </div>
+
+        @if (expanded()) {
+          <div
+            class="category-filter__popup"
+            role="dialog"
+            aria-label="All categories"
+            animate.enter="category-panel-enter"
+            animate.leave="category-panel-leave"
+          >
+            <div class="category-filter__groups">
               @for (group of letterGroups(); track group.letter; let i = $index) {
                 <section
                   class="letter-group"
@@ -67,32 +104,33 @@ export interface CategoryLetterGroup {
                 </section>
               }
             </div>
-          }
-        </div>
 
-        @if (hasMore()) {
-          <button
-            class="expand-btn"
-            [class.expand-btn--expanded]="expanded()"
-            type="button"
-            [attr.aria-expanded]="expanded()"
-            [attr.aria-label]="expanded() ? 'Show fewer categories' : 'Show all categories'"
-            (click)="toggleExpanded()"
-          >
-            <span class="expand-btn__icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" width="18" height="18" focusable="false">
-                <path
-                  d="M6 9l6 6 6-6"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-              </svg>
-            </span>
-            <span class="expand-btn__label">{{ expanded() ? 'Less' : 'More' }}</span>
-          </button>
+            @if (hasMore()) {
+              <div class="category-filter__footer">
+                <button
+                  class="expand-btn expand-btn--expanded"
+                  type="button"
+                  aria-expanded="true"
+                  aria-label="Show fewer categories"
+                  (click)="closeExpanded()"
+                >
+                  <span class="expand-btn__icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="18" height="18" focusable="false">
+                      <path
+                        d="M6 9l6 6 6-6"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                  </span>
+                  <span class="expand-btn__label">Less</span>
+                </button>
+              </div>
+            }
+          </div>
         }
       </div>
     </div>
@@ -120,10 +158,17 @@ export class CategoryFilterComponent {
 
   select(slug: VendorCategory): void {
     this.selected.set(slug);
+    if (this.expanded()) {
+      this.closeExpanded();
+    }
   }
 
   toggleExpanded(): void {
-    this.expanded.update((open) => !open);
+    this.expanded.set(true);
+  }
+
+  closeExpanded(): void {
+    this.expanded.set(false);
   }
 }
 
