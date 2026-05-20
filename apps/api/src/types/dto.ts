@@ -6,7 +6,14 @@ export interface UserDto {
   role: UserRoleDto;
   name?: string;
   area?: string;
+  photoUrl?: string;
   createdAt: string;
+}
+
+export interface VendorServiceDto {
+  name: string;
+  description?: string;
+  imageUrl?: string;
 }
 
 export interface VendorDto {
@@ -17,11 +24,20 @@ export interface VendorDto {
   category: string;
   area: string;
   about?: string;
-  services?: string[];
+  services?: VendorServiceDto[];
   photoUrl?: string;
   status: 'draft' | 'live' | 'inactive';
   createdAt: string;
   updatedAt?: string;
+}
+
+export interface ReviewDto {
+  id: string;
+  vendorId: string;
+  authorName: string;
+  rating: number;
+  comment: string;
+  createdAt: string;
 }
 
 export interface VendorStatsDto {

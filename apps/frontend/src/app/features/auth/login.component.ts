@@ -10,9 +10,9 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import type { UserRole } from '../../core/models/user.model';
 import { AuthService } from '../../core/services/auth.service';
+import { SidebarService } from '../../core/services/sidebar.service';
 import { OtpInputComponent } from '../../shared/ui/otp-input.component';
 import { ToggleComponent } from '../../shared/ui/toggle.component';
-
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -67,6 +67,7 @@ import { ToggleComponent } from '../../shared/ui/toggle.component';
 export class LoginComponent implements OnDestroy {
   private readonly auth = inject(AuthService);
   private readonly router = inject(Router);
+  private readonly sidebar = inject(SidebarService);
 
   /** Phone input binds as string via ngModel; sync into signal before API calls */
   phoneModel = '';
@@ -82,6 +83,10 @@ export class LoginComponent implements OnDestroy {
     this.resendTimer() > 0 ? `Resend OTP in ${this.resendTimer()}s` : 'Resend OTP',
   );
   private timerId?: ReturnType<typeof setInterval>;
+
+  constructor() {
+    this.sidebar.close();
+  }
 
   ngOnDestroy(): void {
     if (this.timerId) {

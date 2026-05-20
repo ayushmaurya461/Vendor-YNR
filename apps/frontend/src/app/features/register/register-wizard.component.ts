@@ -1,23 +1,21 @@
-import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, OnInit, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import type { Vendor } from '../../core/models/vendor.model';
 import { VendorApiService } from '../../core/services/vendor-api.service';
 import { AuthService } from '../../core/services/auth.service';
 import { ReviewStepComponent } from './steps/review-step.component';
 import { VendorInfoStepComponent } from './steps/vendor-info-step.component';
+import { PageHeaderComponent } from '../../shared/ui/page-header.component';
 
 @Component({
   selector: 'app-register-wizard',
   standalone: true,
   styleUrl: './register-wizard.component.css',
-  imports: [ReactiveFormsModule, RouterLink, VendorInfoStepComponent, ReviewStepComponent],
+  imports: [ReactiveFormsModule, VendorInfoStepComponent, ReviewStepComponent, PageHeaderComponent],
   template: `
     <section class="view">
-      <header class="page-head">
-        <h1>Register your listing</h1>
-        <a class="btn btn--secondary" routerLink="/dashboard">← Back</a>
-      </header>
+      <app-page-header [title]="pageTitle()" />
 
       <div class="steps">
         <span class="step step--done">✓ Phone</span>
@@ -26,9 +24,19 @@ import { VendorInfoStepComponent } from './steps/vendor-info-step.component';
       </div>
 
       @if (step() === 2) {
-        <app-vendor-info-step [form]="vendorForm" (next)="moveToReview()" />
+        <app-vendor-info-step
+          [form]="vendorForm"
+          (next)="moveToReview()"
+          (cancel)="cancel()"
+        />
       } @else {
-        <app-review-step [form]="vendorForm" (back)="step.set(2)" (saveDraft)="save('draft')" (goLive)="save('live')" />
+        <app-review-step
+          [form]="vendorForm"
+          (back)="step.set(2)"
+          (cancel)="cancel()"
+          (saveDraft)="save('draft')"
+          (goLive)="save('live')"
+        />
       }
       @if (saveError()) {
         <p class="muted">{{ saveError() }}</p>
@@ -42,8 +50,19 @@ export class RegisterWizardComponent implements OnInit {
   private readonly vendorApi = inject(VendorApiService);
   private readonly auth = inject(AuthService);
   private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
   readonly step = signal(2);
   readonly saveError = signal('');
+
+  readonly pageTitle = computed(() => {
+    if (this.route.snapshot.queryParamMap.get('new') === '1') {
+      return 'Add another listing';
+    }
+    if (this.route.snapshot.queryParamMap.get('listingId')) {
+      return 'Edit your listing';
+    }
+    return 'Register your listing';
+  });
 
   readonly vendorForm = this.fb.nonNullable.group({
     name: ['', [Validators.required]],
@@ -52,6 +71,7 @@ export class RegisterWizardComponent implements OnInit {
     about: [''],
     phone: ['', [Validators.required]],
     whatsapp: [''],
+    photoUrl: [''],
   });
 
   ngOnInit(): void {
@@ -60,7 +80,16 @@ export class RegisterWizardComponent implements OnInit {
       phone: phoneDefault,
       whatsapp: phoneDefault,
     });
-    void this.vendorApi.fetchMyListingSilently().then((listing) => {
+    const isNew = this.route.snapshot.queryParamMap.get('new') === '1';
+    const listingId = this.route.snapshot.queryParamMap.get('listingId');
+
+    void this.vendorApi.fetchMyListingsSilently().then((listings) => {
+      if (isNew) {
+        return;
+      }
+      const listing = listingId
+        ? listings.find((row) => row.id === listingId)
+        : listings[0];
       if (!listing) {
         return;
       }
@@ -72,6 +101,7 @@ export class RegisterWizardComponent implements OnInit {
         about: listing.about ?? '',
         phone: listing.phone,
         whatsapp: listing.whatsapp,
+        photoUrl: listing.photoUrl ?? '',
       });
     });
   }
@@ -82,6 +112,11 @@ export class RegisterWizardComponent implements OnInit {
       return;
     }
     this.step.set(3);
+  }
+
+  cancel(): void {
+    const destination = this.vendorApi.hasVendorListing() ? '/dashboard' : '/';
+    void this.router.navigateByUrl(destination);
   }
 
   save(status: 'draft' | 'live'): void {
@@ -96,22 +131,38 @@ export class RegisterWizardComponent implements OnInit {
 
     void (async (): Promise<void> => {
       try {
-        let existing = this.vendorApi.myVendor();
-        if (!existing) {
-          existing = await this.vendorApi.fetchMyListingSilently();
-        }
+        const isNew = this.route.snapshot.queryParamMap.get('new') === '1';
+        const listingId = this.route.snapshot.queryParamMap.get('listingId');
+        const listings = await this.vendorApi.fetchMyListingsSilently();
+        const editTarget = listingId
+          ? listings.find((row) => row.id === listingId)
+          : isNew
+            ? undefined
+            : listings[0];
 
-        if (existing) {
-          await this.vendorApi.patchVendorListing(existing.id, {
+        const photoUrl = value.photoUrl.trim();
+
+        if (editTarget) {
+          await this.vendorApi.patchVendorListing(editTarget.id, {
             name: value.name.trim(),
             category: value.category as Vendor['category'],
             area: areaFull,
             phone: value.phone.trim(),
             whatsapp: whatsappDigits,
             about: value.about.trim() ? value.about.trim() : undefined,
-            services: ['Wiring', 'Switchboard'],
+            services: [
+              {
+                name: 'Wiring',
+                description: 'Home and shop wiring, fault finding, and new connections.',
+              },
+              {
+                name: 'Switchboard',
+                description: 'Switchboard repair, upgrades, and safety checks.',
+              },
+            ],
+            photoUrl,
           });
-          await this.vendorApi.updateVendorStatus(existing.id, status);
+          await this.vendorApi.updateVendorStatus(editTarget.id, status);
         } else {
           await this.vendorApi.createVendor({
             name: value.name.trim(),
@@ -120,7 +171,17 @@ export class RegisterWizardComponent implements OnInit {
             phone: value.phone.trim(),
             whatsapp: whatsappDigits,
             about: value.about.trim() ? value.about.trim() : undefined,
-            services: ['Wiring', 'Switchboard'],
+            services: [
+              {
+                name: 'Wiring',
+                description: 'Home and shop wiring, fault finding, and new connections.',
+              },
+              {
+                name: 'Switchboard',
+                description: 'Switchboard repair, upgrades, and safety checks.',
+              },
+            ],
+            photoUrl: photoUrl || undefined,
             status,
           });
         }

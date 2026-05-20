@@ -1,5 +1,25 @@
 @import '../../../shared/ui/card.component.css';
 @import '../../../shared/ui/button.component.css';
+@import '../../../shared/ui/meta-line.css';
+
+.review-card__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
+}
+
+.review-hero {
+  display: flex;
+  gap: var(--space-3);
+  align-items: center;
+  margin-bottom: var(--space-3);
+}
+
+.review-hero p {
+  margin: 0 0 var(--space-1);
+}
 
 .section-title {
   font-size: var(--text-md);
@@ -11,7 +31,16 @@
 
 .register-actions {
   display: flex;
+  align-items: center;
+  justify-content: space-between;
   gap: var(--space-2);
-  justify-content: flex-end;
   flex-wrap: wrap;
+  margin-top: var(--space-4);
+}
+
+.register-actions__end {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+  margin-left: auto;
 }

@@ -6,8 +6,8 @@ import { getInitials } from '../utils/initials.util';
   standalone: true,
   styleUrl: './avatar.component.css',
   template: `
-    @if (photoUrl()) {
-      <img class="avatar avatar--image" [src]="photoUrl()" [alt]="name()" />
+    @if (photoUrl()?.trim()) {
+      <img class="avatar avatar--image" [src]="photoUrl()!" [alt]="name()" />
     } @else {
       <span class="avatar">{{ initials() }}</span>
     }

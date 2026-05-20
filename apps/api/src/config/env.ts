@@ -11,6 +11,8 @@ const schema = z
     CLOUDINARY_CLOUD_NAME: z.string().min(1),
     CLOUDINARY_API_KEY: z.string().min(1),
     CLOUDINARY_API_SECRET: z.string().min(1),
+    /** auto = local disk in development, Cloudinary in production when configured */
+    MEDIA_UPLOAD: z.enum(['auto', 'local', 'cloudinary']).default('auto'),
     OTP_LOG_ONLY: z.coerce.boolean().default(false),
     MSG91_AUTH_KEY: z.string().optional(),
     MSG91_TEMPLATE_ID: z.string().optional(),

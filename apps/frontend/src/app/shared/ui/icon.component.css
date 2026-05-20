@@ -1,0 +1,21 @@
+:host {
+  display: inline-flex;
+  flex-shrink: 0;
+  line-height: 0;
+}
+
+.icon {
+  display: block;
+}
+
+.icon--whatsapp {
+  overflow: visible;
+}
+
+.icon-whatsapp__bubble {
+  fill: #25d366;
+}
+
+.icon-whatsapp__handset {
+  fill: #fff;
+}

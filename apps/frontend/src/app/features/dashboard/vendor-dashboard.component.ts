@@ -13,21 +13,27 @@ import { StatCardComponent } from '../../shared/ui/stat-card.component';
 import { AvatarComponent } from '../../shared/ui/avatar.component';
 import { BadgeComponent } from '../../shared/ui/badge.component';
 import { ToggleComponent } from '../../shared/ui/toggle.component';
+import { PageHeaderComponent } from '../../shared/ui/page-header.component';
+import { IconComponent } from '../../shared/ui/icon.component';
+import { EmptyStateComponent } from '../../shared/ui/empty-state.component';
 
 @Component({
   selector: 'app-vendor-dashboard',
   standalone: true,
   styleUrl: './vendor-dashboard.component.css',
-  imports: [RouterLink, StatCardComponent, AvatarComponent, BadgeComponent, ToggleComponent],
+  imports: [
+    RouterLink,
+    StatCardComponent,
+    AvatarComponent,
+    BadgeComponent,
+    ToggleComponent,
+    PageHeaderComponent,
+    IconComponent,
+    EmptyStateComponent,
+  ],
   template: `
     <section class="view">
-      <header class="page-head">
-        <div>
-          <h1>Vendor dashboard</h1>
-          <p class="muted">{{ auth.user()?.name }}</p>
-        </div>
-        <a class="btn btn--secondary" routerLink="/register">Edit listing</a>
-      </header>
+      <app-page-header title="Vendor dashboard" [subtitle]="auth.user()?.name" />
 
       @if (loadError()) {
         <p class="muted">{{ loadError() }}</p>
@@ -51,23 +57,44 @@ import { ToggleComponent } from '../../shared/ui/toggle.component';
         </app-toggle>
       </article>
 
-      @if (vendor(); as data) {
-        <article class="card vendor-card">
-          <p class="muted">Your listing preview</p>
-          <div class="vendor-card__top">
-            <app-avatar [name]="data.name" [photoUrl]="data.photoUrl" />
-            <div>
-              <h3>{{ data.name }}</h3>
-              <p>{{ data.category }}</p>
-              <p class="muted">📍 {{ data.area }}</p>
+      @if (listings().length > 0) {
+        <div class="dashboard-listings-head">
+          <p class="section-title">Your listings</p>
+          <a class="btn btn--primary" routerLink="/register" [queryParams]="{ new: '1' }">Add another listing</a>
+        </div>
+
+        @for (listing of listings(); track listing.id) {
+          <article class="card vendor-card">
+            <div class="vendor-preview__head">
+              <p class="muted">Listing preview</p>
+              <a class="btn btn--secondary" routerLink="/register" [queryParams]="{ listingId: listing.id }">
+                Edit listing
+              </a>
             </div>
-          </div>
-          <app-badge [tone]="isActive() ? 'success' : 'danger'">{{ isActive() ? '● Available' : '● Inactive' }}</app-badge>
-        </article>
+            <div class="vendor-card__top">
+              <app-avatar [name]="listing.name" [photoUrl]="listing.photoUrl" />
+              <div>
+                <h3>{{ listing.name }}</h3>
+                <p>{{ listing.category }}</p>
+                <p class="meta-line muted">
+                  <app-icon name="location" [size]="16" />
+                  <span>{{ listing.area }}</span>
+                </p>
+              </div>
+            </div>
+            <app-badge [tone]="listing.status === 'live' ? 'success' : 'danger'">
+              {{ listing.status === 'live' ? '● Available' : listing.status === 'draft' ? '● Draft' : '● Inactive' }}
+            </app-badge>
+          </article>
+        }
       } @else {
-        <article class="card">
-          <p class="muted">No listing found yet. Use Register listing to create one.</p>
-        </article>
+        <app-empty-state
+          icon="info"
+          title="No listing found yet"
+          description="Use Register listing to create your vendor profile."
+        >
+          <a class="btn btn--primary" routerLink="/register">Register listing</a>
+        </app-empty-state>
       }
     </section>
   `,
@@ -79,6 +106,7 @@ export class VendorDashboardComponent implements OnInit {
   readonly loadError = signal<string | null>(null);
   readonly toggleBusy = signal(false);
   readonly stats = computed(() => this.vendorApi.dashboardStats());
+  readonly listings = computed(() => this.vendorApi.myListings());
   readonly vendor = computed(() => this.vendorApi.myVendor());
   readonly isActive = computed(() => this.vendorApi.myVendor()?.status === 'live');
 

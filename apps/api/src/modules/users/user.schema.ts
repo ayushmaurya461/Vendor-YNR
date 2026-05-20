@@ -5,6 +5,7 @@ export interface IUser {
   role: 'customer' | 'vendor';
   name?: string;
   area?: string;
+  photoUrl?: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -17,6 +18,7 @@ const UserSchema = new Schema<IUser>(
     role: { type: String, required: true, enum: ['customer', 'vendor'] },
     name: { type: String },
     area: { type: String },
+    photoUrl: { type: String },
   },
   { timestamps: true },
 );

@@ -1,0 +1,13 @@
+.location-label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  margin: 0;
+  font-size: var(--text-sm);
+  line-height: var(--line-height-snug);
+  color: var(--color-text-secondary);
+}
+
+.location-label app-icon {
+  color: var(--color-primary);
+}

@@ -13,6 +13,7 @@ interface UserApiDto {
   role: UserRole;
   name?: string;
   area?: string;
+  photoUrl?: string;
   createdAt: string;
 }
 
@@ -31,6 +32,7 @@ function mapApiUser(u: UserApiDto): User {
     role: u.role,
     name: u.name,
     area: u.area,
+    photoUrl: u.photoUrl,
     createdAt: u.createdAt,
     profileComplete: u.role === 'vendor' ? true : !!(u.name?.trim() && u.area?.trim()),
   };
@@ -82,7 +84,7 @@ export class AuthService {
     this.setSession(token, user);
   }
 
-  async patchProfile(patch: { name?: string; area?: string }): Promise<void> {
+  async patchProfile(patch: { name?: string; area?: string; photoUrl?: string }): Promise<void> {
     const res = await firstValueFrom(
       this.http.patch<{ success: boolean; data: UserApiDto }>(
         `${environment.apiUrl}/users/me`,
@@ -147,6 +149,7 @@ export class AuthService {
           role: s.user.role,
           name: s.user.name,
           area: s.user.area,
+          photoUrl: s.user.photoUrl,
           createdAt: s.user.createdAt,
         },
       }),

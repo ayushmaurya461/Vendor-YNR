@@ -9,6 +9,7 @@ export function toUserDto(u: IUser & { _id: Types.ObjectId }): UserDto {
     role: u.role,
     name: u.name,
     area: u.area,
+    photoUrl: u.photoUrl,
     createdAt: u.createdAt?.toISOString?.() ?? new Date().toISOString(),
   };
 }

@@ -1,4 +1,4 @@
-import type { FilterQuery, Types } from 'mongoose';
+import { Types, type FilterQuery } from 'mongoose';
 import { VendorModel, type IVendor } from './vendor.schema.js';
 
 export async function createVendor(doc: Omit<IVendor, 'createdAt' | 'updatedAt'>): Promise<{
@@ -26,11 +26,37 @@ export async function findVendorById(
 export async function findVendorByUserId(
   userId: string,
 ): Promise<(IVendor & { _id: Types.ObjectId }) | null> {
-  return VendorModel.findOne({ userId }).lean<(IVendor & { _id: Types.ObjectId }) | null>().exec();
+  return VendorModel.findOne({ userId }).sort({ createdAt: -1 }).lean<(IVendor & { _id: Types.ObjectId }) | null>().exec();
+}
+
+export async function findVendorsByUserId(
+  userId: string,
+): Promise<(IVendor & { _id: Types.ObjectId })[]> {
+  if (!Types.ObjectId.isValid(userId)) {
+    return [];
+  }
+  return VendorModel.find({ userId: new Types.ObjectId(userId) })
+    .sort({ createdAt: -1 })
+    .lean<(IVendor & { _id: Types.ObjectId })[]>()
+    .exec();
 }
 
 export async function countLiveVendors(filter: FilterQuery<IVendor>): Promise<number> {
   return VendorModel.countDocuments({ ...filter, status: 'live' }).exec();
+}
+
+export async function findVendorsByIds(
+  vendorIds: string[],
+): Promise<(IVendor & { _id: Types.ObjectId })[]> {
+  const ids = vendorIds
+    .filter((id) => Types.ObjectId.isValid(id))
+    .map((id) => new Types.ObjectId(id));
+  if (ids.length === 0) {
+    return [];
+  }
+  return VendorModel.find({ _id: { $in: ids }, status: { $ne: 'draft' } })
+    .lean<(IVendor & { _id: Types.ObjectId })[]>()
+    .exec();
 }
 
 export async function findLiveVendors(opts: {

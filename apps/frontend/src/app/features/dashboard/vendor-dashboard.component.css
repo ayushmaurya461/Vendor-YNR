@@ -1,7 +1,31 @@
 @import '../../shared/ui/muted.css';
+@import '../../shared/ui/meta-line.css';
 @import '../../shared/ui/card.component.css';
 @import '../../shared/ui/button.component.css';
 @import '../../shared/vendor/vendor-card.css';
+
+.dashboard-listings-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.dashboard-listings-head .section-title {
+  margin: 0;
+}
+
+.vendor-preview__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.vendor-preview__head .muted {
+  margin: 0;
+}
 
 .stats {
   display: grid;

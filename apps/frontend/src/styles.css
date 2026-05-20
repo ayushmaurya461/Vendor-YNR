@@ -60,6 +60,7 @@
   --layout-page-y: var(--space-4);
   --layout-header-height: 56px;
   --layout-sidebar-width: min(85vw, 280px);
+  --layout-sidebar-persistent: 900px;
   --layout-bottom-safe: env(safe-area-inset-bottom, 0px);
   --layout-top-safe: env(safe-area-inset-top, 0px);
   --layout-content-top: calc(var(--layout-top-safe) + var(--space-2));
@@ -142,6 +143,8 @@
   --color-bg-tertiary: var(--color-neutral-700);
   --color-bg-elevated: var(--color-neutral-800);
   --color-bg-header: color-mix(in srgb, var(--color-neutral-850) 82%, var(--color-brand-500) 18%);
+  --color-bg-header-toggle: color-mix(in srgb, var(--color-bg-header) 50%, var(--color-bg-elevated) 50%);
+  --color-border-header-toggle: color-mix(in srgb, var(--color-brand-500) 40%, var(--color-border-strong));
   --color-bg-overlay: rgba(0, 0, 0, 0.72);
   --color-bg-active: var(--color-neutral-700);
 
@@ -203,6 +206,8 @@
   --color-bg-tertiary: var(--color-neutral-700);
   --color-bg-elevated: var(--color-neutral-900);
   --color-bg-header: color-mix(in srgb, var(--color-neutral-900) 88%, var(--color-brand-500) 12%);
+  --color-bg-header-toggle: color-mix(in srgb, var(--color-neutral-900) 92%, var(--color-brand-500) 8%);
+  --color-border-header-toggle: color-mix(in srgb, var(--color-brand-500) 32%, var(--color-border));
   --color-bg-overlay: rgba(15, 23, 42, 0.4);
   --color-bg-active: var(--color-neutral-700);
 
@@ -287,5 +292,24 @@ h3 {
 
 h4 {
   font-size: var(--text-md);
+}
+
+/* Pointer on every interactive button/control */
+button:not(:disabled),
+input[type='button']:not(:disabled),
+input[type='submit']:not(:disabled),
+input[type='reset']:not(:disabled),
+.btn,
+.chip,
+.menu-link,
+[role='button']:not([aria-disabled='true']) {
+  cursor: pointer;
+}
+
+button:disabled,
+.btn:disabled,
+.chip:disabled,
+[role='button'][aria-disabled='true'] {
+  cursor: not-allowed;
 }
 

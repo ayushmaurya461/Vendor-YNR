@@ -1,40 +1,40 @@
+<app-progress-bar />
+<app-toast-container />
 <div class="layout">
-  <button
-    class="sidebar-toggle"
-    type="button"
-    [attr.aria-label]="isSidebarOpen() ? 'Close menu' : 'Open menu'"
-    (click)="isSidebarOpen() ? closeSidebar() : openSidebar()"
-  >
-    {{ isSidebarOpen() ? '✕' : '☰' }}
-  </button>
-
-  <aside class="sidebar" [class.sidebar--open]="isSidebarOpen()">
-    @if (sidebarPanel() === 'main') {
+  <aside class="sidebar" [class.sidebar--open]="sidebar.isOpen()">
+    @if (sidebar.panel() === 'main') {
       <div class="brand">
         <h2>YNR Local</h2>
-        <p class="muted">Yamunanagar</p>
+        <app-location-label />
       </div>
-      @if (!isLoggedIn()) {
+      @if (isLoggedIn()) {
         <nav class="menu-section">
-          <a routerLink="/login" routerLinkActive="active-link" (click)="closeSidebar()">Login / OTP</a>
+          <h4>Customer</h4>
+          <a routerLink="/" [routerLinkActiveOptions]="{ exact: true }" routerLinkActive="active-link" (click)="closeSidebar()">Home</a>
+          <a routerLink="/saved" routerLinkActive="active-link" (click)="closeSidebar()">Saved</a>
+          <a
+            routerLink="/vendors"
+            routerLinkActive="active-link"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="closeSidebar()"
+          >
+            Find vendor
+          </a>
+          <a routerLink="/profile" routerLinkActive="active-link" (click)="closeSidebar()">My profile</a>
+        </nav>
+        <nav class="menu-section menu-section--grow">
+          <h4>Vendor</h4>
+          @if (isVendor()) {
+            <a routerLink="/dashboard" routerLinkActive="active-link" (click)="closeSidebar()">Dashboard</a>
+          }
+          @if (!hasVendorListing()) {
+            <a routerLink="/register" routerLinkActive="active-link" (click)="closeSidebar()">Register listing</a>
+          }
+        </nav>
+        <nav class="menu-section menu-section--footer">
+          <button class="menu-link" type="button" (click)="openSettingsPanel()">Settings</button>
         </nav>
       }
-      <nav class="menu-section">
-        <h4>Customer</h4>
-        <a routerLink="/" [routerLinkActiveOptions]="{ exact: true }" routerLinkActive="active-link" (click)="closeSidebar()">Home</a>
-        <a routerLink="/vendors/v1" routerLinkActive="active-link" (click)="closeSidebar()">Vendor detail</a>
-        <a routerLink="/profile" routerLinkActive="active-link" (click)="closeSidebar()">My profile</a>
-      </nav>
-      <nav class="menu-section menu-section--grow">
-        <h4>Vendor</h4>
-        @if (isVendor()) {
-          <a routerLink="/dashboard" routerLinkActive="active-link" (click)="closeSidebar()">Dashboard</a>
-        }
-        <a routerLink="/register" routerLinkActive="active-link" (click)="closeSidebar()">Register listing</a>
-      </nav>
-      <nav class="menu-section menu-section--footer">
-        <button class="menu-link" type="button" (click)="openSettingsPanel()">Settings</button>
-      </nav>
     } @else {
       <nav class="menu-section menu-section--settings-panel">
         <button class="menu-link menu-link--back" type="button" (click)="closeSettingsPanel()">
@@ -57,7 +57,7 @@
     }
   </aside>
 
-  @if (isSidebarOpen()) {
+  @if (sidebar.isOpen()) {
     <button class="sidebar-backdrop" type="button" aria-label="Close menu" (click)="closeSidebar()"></button>
   }
 

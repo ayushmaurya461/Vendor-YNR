@@ -1,1 +1,41 @@
 @import '../../shared/ui/muted.css';
+@import '../../shared/ui/button.component.css';
+
+.home-block {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.home-block__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.home-block__link {
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-link);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.home-cta {
+  display: flex;
+  justify-content: center;
+  padding: var(--space-2) 0 var(--space-4);
+}
+
+.home-cta .btn--primary {
+  width: 100%;
+  max-width: 360px;
+}
+
+.section-title {
+  margin: 0;
+  font-size: var(--text-md);
+  font-weight: var(--font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-wide);
+}

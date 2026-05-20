@@ -20,9 +20,22 @@ export async function createUser(params: Omit<IUser, 'createdAt' | 'updatedAt'>)
 
 export async function updateUser(
   userId: string,
-  patch: Partial<Pick<IUser, 'name' | 'area'>>,
+  patch: Partial<Pick<IUser, 'name' | 'area' | 'photoUrl'>>,
 ): Promise<(IUser & { _id: Types.ObjectId }) | null> {
-  return UserModel.findByIdAndUpdate(userId, { $set: patch }, { new: true })
+  const $set: Partial<IUser> = {};
+  if (patch.name !== undefined) {
+    $set.name = patch.name;
+  }
+  if (patch.area !== undefined) {
+    $set.area = patch.area;
+  }
+  if (patch.photoUrl !== undefined) {
+    $set.photoUrl = patch.photoUrl === '' ? undefined : patch.photoUrl;
+  }
+  if (Object.keys($set).length === 0) {
+    return findUserById(userId);
+  }
+  return UserModel.findByIdAndUpdate(userId, { $set }, { new: true })
     .lean<(IUser & { _id: Types.ObjectId }) | null>()
     .exec();
 }

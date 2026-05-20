@@ -1,0 +1,87 @@
+.toast-host {
+  position: fixed;
+  bottom: calc(var(--space-4) + var(--layout-bottom-safe));
+  left: 50%;
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  width: min(420px, calc(100vw - var(--space-8)));
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.toast {
+  pointer-events: auto;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-elevated);
+  box-shadow: var(--shadow-overlay);
+  cursor: pointer;
+  animation: toast-enter 220ms ease-out;
+}
+
+.toast--success {
+  border-color: color-mix(in srgb, var(--color-success) 35%, var(--color-border));
+  background: var(--color-success-bg);
+}
+
+.toast--error {
+  border-color: color-mix(in srgb, var(--color-danger) 35%, var(--color-border));
+  background: var(--color-danger-bg);
+}
+
+.toast__message {
+  margin: 0;
+  padding: var(--space-3) var(--space-4);
+  font-size: var(--text-sm);
+  line-height: var(--line-height-snug);
+  color: var(--color-text-primary);
+}
+
+.toast--success .toast__message {
+  color: var(--color-success-on);
+}
+
+.toast--error .toast__message {
+  color: var(--color-danger-on);
+}
+
+.toast__progress {
+  height: 3px;
+  transform-origin: left center;
+  animation-name: toast-progress;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+
+.toast--success .toast__progress {
+  background: var(--color-success);
+}
+
+.toast--error .toast__progress {
+  background: var(--color-danger);
+}
+
+@keyframes toast-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes toast-progress {
+  from {
+    transform: scaleX(1);
+  }
+
+  to {
+    transform: scaleX(0);
+  }
+}

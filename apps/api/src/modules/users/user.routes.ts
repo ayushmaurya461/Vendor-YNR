@@ -17,7 +17,7 @@ const userRoutes: FastifyPluginAsync = async (app) => {
     },
   );
 
-  app.patch<{ Body: { name?: string; area?: string } }>(
+  app.patch<{ Body: { name?: string; area?: string; photoUrl?: string } }>(
     '/me',
     {
       preHandler: [app.authenticate],
@@ -28,6 +28,7 @@ const userRoutes: FastifyPluginAsync = async (app) => {
           properties: {
             name: { type: 'string', minLength: 1, maxLength: 80 },
             area: { type: 'string', minLength: 1, maxLength: 120 },
+            photoUrl: { type: 'string', maxLength: 500 },
           },
         },
       },
@@ -41,6 +42,7 @@ const userRoutes: FastifyPluginAsync = async (app) => {
       const updated = await UserRepo.updateUser(u.userId, {
         name: request.body.name,
         area: request.body.area,
+        photoUrl: request.body.photoUrl,
       });
       if (!updated) {
         throw app.httpErrors.notFound('User not found');

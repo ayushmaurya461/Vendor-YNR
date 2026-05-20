@@ -34,3 +34,7 @@
   color: var(--color-danger);
   background: transparent;
 }
+
+.btn:disabled {
+  cursor: not-allowed;
+}

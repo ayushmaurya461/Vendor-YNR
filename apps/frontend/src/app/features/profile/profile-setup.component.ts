@@ -2,18 +2,17 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
+import { PageHeaderComponent } from '../../shared/ui/page-header.component';
 
 @Component({
   selector: 'app-profile-setup',
   standalone: true,
   styleUrl: './profile-setup.component.css',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, PageHeaderComponent],
   template: `
     <section class="view view--center">
       <div class="auth-card card">
-        <header class="page-head">
-          <h1>Set up your profile</h1>
-        </header>
+        <app-page-header title="Set up your profile" variant="static" />
         <form [formGroup]="form" class="auth-block" (ngSubmit)="save()">
           <label>Name</label>
           <input class="input" formControlName="name" />
