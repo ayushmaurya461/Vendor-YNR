@@ -3,6 +3,7 @@ import { ChangeDetectionStrategy, Component, model } from '@angular/core';
 @Component({
   selector: 'app-otp-input',
   standalone: true,
+  styleUrl: './otp-input.component.css',
   template: `
     <div class="otp">
       @for (digit of digits; track $index) {

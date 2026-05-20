@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-profile',
   standalone: true,
+  styleUrl: './profile.component.css',
   imports: [CommonModule, FormsModule, AvatarComponent],
   template: `
     @if (auth.user(); as user) {
@@ -48,8 +49,11 @@ import { Router } from '@angular/router';
 
         <article class="card actions-grid">
           <p class="section-title">Actions</p>
-          <div><span>Saved vendors</span><strong>3 saved</strong></div>
-          <div>
+          <div class="actions-row">
+            <span>Saved vendors</span>
+            <strong>3 saved</strong>
+          </div>
+          <div class="actions-buttons">
             <button class="btn btn--ghost" (click)="save()">Save profile</button>
             <button class="btn btn--danger" (click)="logout()">Sign out</button>
           </div>

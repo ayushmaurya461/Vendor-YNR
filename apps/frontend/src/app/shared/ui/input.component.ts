@@ -3,6 +3,7 @@ import { ChangeDetectionStrategy, Component, input, model } from '@angular/core'
 @Component({
   selector: 'app-input',
   standalone: true,
+  styleUrl: './input.component.css',
   template: `
     <input
       class="input"

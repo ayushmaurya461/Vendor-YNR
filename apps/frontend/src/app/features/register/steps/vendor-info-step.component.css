@@ -1,0 +1,42 @@
+@import '../../../shared/ui/input.component.css';
+@import '../../../shared/ui/button.component.css';
+
+.register-form {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.upload {
+  border: 1px dashed var(--color-border-strong);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  text-align: center;
+  color: var(--color-text-secondary);
+}
+
+.row {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.two-col {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.register-actions {
+  display: flex;
+  gap: var(--space-2);
+  justify-content: flex-end;
+}
+
+@media (max-width: 767px) {
+  .two-col {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (min-width: 768px) {
+  .two-col {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

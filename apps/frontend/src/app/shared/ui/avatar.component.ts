@@ -4,6 +4,7 @@ import { getInitials } from '../utils/initials.util';
 @Component({
   selector: 'app-avatar',
   standalone: true,
+  styleUrl: './avatar.component.css',
   template: `
     @if (photoUrl()) {
       <img class="avatar avatar--image" [src]="photoUrl()" [alt]="name()" />

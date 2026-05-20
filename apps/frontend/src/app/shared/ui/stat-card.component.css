@@ -1,0 +1,13 @@
+@import './card.component.css';
+@import './muted.css';
+
+.stat-card {
+  padding: var(--space-3);
+}
+
+.stat-card__value {
+  font-size: var(--text-3xl);
+  margin: 0;
+  line-height: var(--line-height-tight);
+  font-weight: var(--font-weight-semibold);
+}

@@ -4,6 +4,7 @@ import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 @Component({
   selector: 'app-vendor-info-step',
   standalone: true,
+  styleUrl: './vendor-info-step.component.css',
   imports: [ReactiveFormsModule],
   template: `
     <form class="register-form" [formGroup]="form()">

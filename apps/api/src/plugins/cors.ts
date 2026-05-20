@@ -7,6 +7,7 @@ const corsPlugin: FastifyPluginAsync = async (app) => {
   await app.register(cors, {
     origin: env.FRONTEND_ORIGIN,
     credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   });
 };
 

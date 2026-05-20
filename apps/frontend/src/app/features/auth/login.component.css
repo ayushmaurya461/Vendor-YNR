@@ -1,0 +1,50 @@
+@import '../../shared/ui/muted.css';
+@import '../../shared/ui/card.component.css';
+@import '../../shared/ui/input.component.css';
+@import '../../shared/ui/button.component.css';
+
+.view--center {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: var(--layout-page-x);
+  padding-bottom: calc(var(--layout-page-y) + var(--layout-bottom-safe));
+  box-sizing: border-box;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: var(--layout-form-max);
+}
+
+.auth-block {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.auth-title {
+  margin: 0;
+  font-size: var(--text-2xl);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-tight);
+  letter-spacing: var(--letter-spacing-tight);
+}
+
+.phone-row {
+  display: grid;
+  grid-template-columns: 80px minmax(0, 1fr);
+  gap: var(--space-2);
+}
+
+.phone-prefix {
+  display: inline-flex;
+  align-items: center;
+}
+
+.form-error {
+  margin: 0;
+  color: var(--color-danger);
+  font-size: var(--text-sm);
+  line-height: var(--line-height-normal);
+}

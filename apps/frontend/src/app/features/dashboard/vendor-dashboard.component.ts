@@ -12,11 +12,13 @@ import { VendorApiService } from '../../core/services/vendor-api.service';
 import { StatCardComponent } from '../../shared/ui/stat-card.component';
 import { AvatarComponent } from '../../shared/ui/avatar.component';
 import { BadgeComponent } from '../../shared/ui/badge.component';
+import { ToggleComponent } from '../../shared/ui/toggle.component';
 
 @Component({
   selector: 'app-vendor-dashboard',
   standalone: true,
-  imports: [RouterLink, StatCardComponent, AvatarComponent, BadgeComponent],
+  styleUrl: './vendor-dashboard.component.css',
+  imports: [RouterLink, StatCardComponent, AvatarComponent, BadgeComponent, ToggleComponent],
   template: `
     <section class="view">
       <header class="page-head">
@@ -37,18 +39,16 @@ import { BadgeComponent } from '../../shared/ui/badge.component';
         <app-stat-card label="WhatsApps" [value]="stats().whatsappsThisWeek" />
       </section>
 
-      <article class="card toggle-row">
-        <div>
+      <article class="card">
+        <app-toggle
+          [checked]="isActive()"
+          [disabled]="toggleBusy() || !vendor()"
+          ariaLabel="Listing active"
+          (checkedChange)="onListingActiveChange($event)"
+        >
           <h3>Listing active</h3>
           <p class="muted">Customers can find and contact you</p>
-        </div>
-        <button
-          class="toggle"
-          type="button"
-          [class.toggle--on]="isActive()"
-          [disabled]="toggleBusy() || !vendor()"
-          (click)="toggleActive()"
-        ></button>
+        </app-toggle>
       </article>
 
       @if (vendor(); as data) {
@@ -90,12 +90,15 @@ export class VendorDashboardComponent implements OnInit {
     });
   }
 
-  toggleActive(): void {
+  onListingActiveChange(active: boolean): void {
     const v = this.vendorApi.myVendor();
     if (!v || this.toggleBusy()) {
       return;
     }
-    const next: 'live' | 'inactive' = v.status === 'live' ? 'inactive' : 'live';
+    const next: 'live' | 'inactive' = active ? 'live' : 'inactive';
+    if (next === v.status) {
+      return;
+    }
     this.toggleBusy.set(true);
     void this.vendorApi
       .updateVendorStatus(v.id, next)

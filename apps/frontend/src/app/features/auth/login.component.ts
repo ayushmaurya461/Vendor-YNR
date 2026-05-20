@@ -11,52 +11,55 @@ import { Router, RouterLink } from '@angular/router';
 import type { UserRole } from '../../core/models/user.model';
 import { AuthService } from '../../core/services/auth.service';
 import { OtpInputComponent } from '../../shared/ui/otp-input.component';
+import { ToggleComponent } from '../../shared/ui/toggle.component';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [FormsModule, RouterLink, OtpInputComponent],
+  styleUrl: './login.component.css',
+  imports: [FormsModule, RouterLink, OtpInputComponent, ToggleComponent],
   template: `
-    <section class="view auth-card card">
-      <header class="page-head">
-        <h1>Account</h1>
-        <a class="btn btn--secondary" routerLink="/">← Back</a>
-      </header>
+    <section class="view view--center">
+      <div class="auth-card card">
 
-      @if (!otpStep()) {
-        <div class="auth-block">
-          <p class="auth-title">Welcome to YNR Local</p>
-          <p class="muted">Enter your phone number to continue</p>
-          <label class="muted">Phone number</label>
-          <div class="phone-row">
-            <span class="input phone-prefix">+91</span>
-            <input class="input" [(ngModel)]="phoneModel" placeholder="98765 43210" />
+        @if (!otpStep()) {
+          <div class="auth-block">
+            <p class="auth-title">Welcome to YNR Local</p>
+            <p class="muted">Enter your phone number to continue</p>
+            <label class="muted">Phone number</label>
+            <div class="phone-row">
+              <span class="input phone-prefix">+91</span>
+              <input class="input" [(ngModel)]="phoneModel" placeholder="98765 43210" />
+            </div>
+            <app-toggle
+              [(checked)]="vendorSignup"
+              ariaLabel="Create as vendor account for new signups"
+            >
+              <span class="muted">Create as vendor account (new signups)</span>
+            </app-toggle>
+            @if (formError()) {
+              <p class="form-error" role="alert">{{ formError() }}</p>
+            }
+            <button class="btn btn--secondary" [disabled]="busy()" (click)="sendOtp()">Send OTP</button>
+            <p class="muted">Are you a vendor? <a routerLink="/register">Register listing</a> (requires vendor login)</p>
           </div>
-          <label class="muted"
-            ><input type="checkbox" [(ngModel)]="vendorSignup" /> Create as vendor account (new signups)</label
-          >
-          @if (formError()) {
-            <p class="muted">{{ formError() }}</p>
-          }
-          <button class="btn btn--secondary" [disabled]="busy()" (click)="sendOtp()">Send OTP</button>
-          <p class="muted">Are you a vendor? <a routerLink="/register">Register listing</a> (requires vendor login)</p>
-        </div>
-      } @else {
-        <div class="auth-block">
-          <p class="auth-title">Enter OTP</p>
-          <p class="muted">Sent to +91 {{ phone() }}</p>
-          <app-otp-input [(value)]="otp" />
-          @if (formError()) {
-            <p class="muted">{{ formError() }}</p>
-          }
-          <button class="btn btn--secondary" [disabled]="otp().length !== 4 || busy()" (click)="verifyOtp()">
-            Verify & continue
-          </button>
-          <button class="btn btn--ghost" [disabled]="resendTimer() > 0 || busy()" (click)="resetOtp()">
-            {{ resendLabel() }}
-          </button>
-        </div>
-      }
+        } @else {
+          <div class="auth-block">
+            <p class="auth-title">Enter OTP</p>
+            <p class="muted">Sent to +91 {{ phone() }}</p>
+            <app-otp-input [(value)]="otp" />
+            @if (formError()) {
+              <p class="form-error" role="alert">{{ formError() }}</p>
+            }
+            <button class="btn btn--secondary" [disabled]="otp().length !== 4 || busy()" (click)="verifyOtp()">
+              Verify & continue
+            </button>
+            <button class="btn btn--ghost" [disabled]="resendTimer() > 0 || busy()" (click)="resetOtp()">
+              {{ resendLabel() }}
+            </button>
+          </div>
+        }
+      </div>
     </section>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -66,10 +69,10 @@ export class LoginComponent implements OnDestroy {
   private readonly router = inject(Router);
 
   /** Phone input binds as string via ngModel; sync into signal before API calls */
-  phoneModel = '9876543210';
+  phoneModel = '';
   vendorSignup = false;
 
-  readonly phone = signal('9876543210');
+  readonly phone = signal('');
   readonly otpStep = signal(false);
   readonly otp = signal('');
   readonly busy = signal(false);

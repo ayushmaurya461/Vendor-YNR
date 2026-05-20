@@ -10,6 +10,7 @@ import { VendorInfoStepComponent } from './steps/vendor-info-step.component';
 @Component({
   selector: 'app-register-wizard',
   standalone: true,
+  styleUrl: './register-wizard.component.css',
   imports: [ReactiveFormsModule, RouterLink, VendorInfoStepComponent, ReviewStepComponent],
   template: `
     <section class="view">

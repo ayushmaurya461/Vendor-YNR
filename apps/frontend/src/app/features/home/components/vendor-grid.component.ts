@@ -8,6 +8,7 @@ import { getWhatsappUrl } from '../../../shared/utils/whatsapp-url.util';
 @Component({
   selector: 'app-vendor-grid',
   standalone: true,
+  styleUrl: './vendor-grid.component.css',
   imports: [RouterLink, AvatarComponent, BadgeComponent],
   template: `
     <section class="vendor-grid">
@@ -29,6 +30,8 @@ import { getWhatsappUrl } from '../../../shared/utils/whatsapp-url.util';
             <a class="btn btn--secondary" [href]="whatsApp(vendor.whatsapp)" target="_blank" rel="noopener">💬 WhatsApp</a>
           </div>
         </article>
+      } @empty {
+        <p class="muted">no nearby vendors found</p>
       }
     </section>
   `,

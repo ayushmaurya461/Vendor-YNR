@@ -1,0 +1,44 @@
+@import '../../shared/ui/muted.css';
+@import '../../shared/ui/card.component.css';
+@import '../../shared/ui/button.component.css';
+@import '../../shared/ui/chip.css';
+
+.vendor-hero {
+  display: flex;
+  gap: var(--space-3);
+}
+
+.vendor-hero h2 {
+  margin: 0;
+}
+
+.vendor-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.detail-ctas {
+  display: grid;
+  gap: var(--space-2);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.services {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+@media (max-width: 767px) {
+  .detail-ctas {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (min-width: 768px) {
+  .detail-ctas {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

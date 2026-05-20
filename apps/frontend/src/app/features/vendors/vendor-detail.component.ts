@@ -10,6 +10,7 @@ import { getWhatsappUrl } from '../../shared/utils/whatsapp-url.util';
 @Component({
   selector: 'app-vendor-detail',
   standalone: true,
+  styleUrl: './vendor-detail.component.css',
   imports: [RouterLink, AvatarComponent, BadgeComponent],
   template: `
     @if (vendor(); as data) {

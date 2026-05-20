@@ -1,27 +1,66 @@
 <div class="layout">
-  <aside class="sidebar">
-    <div class="brand">
-      <h2>YNR Local</h2>
-      <p class="muted">Yamunanagar</p>
-    </div>
-    <nav class="menu-section">
-      <h4>Customer</h4>
-      <a routerLink="/" [routerLinkActiveOptions]="{ exact: true }" routerLinkActive="active-link">Home</a>
-      <a routerLink="/vendors/v1" routerLinkActive="active-link">Vendor detail</a>
-      <a routerLink="/profile" routerLinkActive="active-link">My profile</a>
-    </nav>
-    <nav class="menu-section menu-section--vendor">
-      <h4>Vendor</h4>
+  <button
+    class="sidebar-toggle"
+    type="button"
+    [attr.aria-label]="isSidebarOpen() ? 'Close menu' : 'Open menu'"
+    (click)="isSidebarOpen() ? closeSidebar() : openSidebar()"
+  >
+    {{ isSidebarOpen() ? '✕' : '☰' }}
+  </button>
+
+  <aside class="sidebar" [class.sidebar--open]="isSidebarOpen()">
+    @if (sidebarPanel() === 'main') {
+      <div class="brand">
+        <h2>YNR Local</h2>
+        <p class="muted">Yamunanagar</p>
+      </div>
       @if (!isLoggedIn()) {
-        <a routerLink="/login" routerLinkActive="active-link">Login / OTP</a>
+        <nav class="menu-section">
+          <a routerLink="/login" routerLinkActive="active-link" (click)="closeSidebar()">Login / OTP</a>
+        </nav>
       }
-      <a routerLink="/dashboard" routerLinkActive="active-link">Dashboard</a>
-      <a routerLink="/register" routerLinkActive="active-link">Register listing</a>
-      @if (isLoggedIn()) {
-        <button class="menu-link menu-link--logout" type="button" (click)="logout()">Logout</button>
-      }
-    </nav>
+      <nav class="menu-section">
+        <h4>Customer</h4>
+        <a routerLink="/" [routerLinkActiveOptions]="{ exact: true }" routerLinkActive="active-link" (click)="closeSidebar()">Home</a>
+        <a routerLink="/vendors/v1" routerLinkActive="active-link" (click)="closeSidebar()">Vendor detail</a>
+        <a routerLink="/profile" routerLinkActive="active-link" (click)="closeSidebar()">My profile</a>
+      </nav>
+      <nav class="menu-section menu-section--grow">
+        <h4>Vendor</h4>
+        @if (isVendor()) {
+          <a routerLink="/dashboard" routerLinkActive="active-link" (click)="closeSidebar()">Dashboard</a>
+        }
+        <a routerLink="/register" routerLinkActive="active-link" (click)="closeSidebar()">Register listing</a>
+      </nav>
+      <nav class="menu-section menu-section--footer">
+        <button class="menu-link" type="button" (click)="openSettingsPanel()">Settings</button>
+      </nav>
+    } @else {
+      <nav class="menu-section menu-section--settings-panel">
+        <button class="menu-link menu-link--back" type="button" (click)="closeSettingsPanel()">
+          ← Back
+        </button>
+        <h4>Settings</h4>
+        <div class="settings-row">
+          <app-toggle
+            [checked]="themeService.isDark()"
+            ariaLabel="Dark mode"
+            (checkedChange)="onDarkModeChange($event)"
+          >
+            <span class="settings-label">Dark mode</span>
+          </app-toggle>
+        </div>
+        @if (isLoggedIn()) {
+          <button class="menu-link menu-link--danger" type="button" (click)="logout()">Logout</button>
+        }
+      </nav>
+    }
   </aside>
+
+  @if (isSidebarOpen()) {
+    <button class="sidebar-backdrop" type="button" aria-label="Close menu" (click)="closeSidebar()"></button>
+  }
+
   <main class="content">
     <router-outlet />
   </main>

@@ -1,0 +1,23 @@
+@import '../../shared/ui/card.component.css';
+@import '../../shared/ui/input.component.css';
+@import '../../shared/ui/button.component.css';
+
+.view--center {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: var(--layout-page-x);
+  padding-bottom: calc(var(--layout-page-y) + var(--layout-bottom-safe));
+  box-sizing: border-box;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: var(--layout-form-max);
+}
+
+.auth-block {
+  display: grid;
+  gap: var(--space-3);
+}

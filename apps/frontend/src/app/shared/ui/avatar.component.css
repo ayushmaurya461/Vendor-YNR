@@ -1,0 +1,16 @@
+.avatar {
+  width: var(--space-12);
+  height: var(--space-12);
+  border-radius: var(--radius-full);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: var(--font-weight-medium);
+  font-size: var(--text-md);
+  background: var(--color-primary-light);
+  color: var(--color-brand-400);
+}
+
+.avatar--image {
+  object-fit: cover;
+}

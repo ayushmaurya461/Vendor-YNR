@@ -1,0 +1,41 @@
+@import '../../shared/ui/muted.css';
+@import '../../shared/ui/card.component.css';
+@import '../../shared/ui/input.component.css';
+@import '../../shared/ui/button.component.css';
+
+.profile-hero {
+  display: flex;
+  gap: var(--space-3);
+}
+
+.details-grid,
+.actions-grid {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.details-grid label {
+  color: var(--color-text-secondary);
+}
+
+.actions-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.actions-buttons {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.actions-buttons .btn--ghost {
+  justify-self: start;
+}
+
+.actions-buttons .btn--danger {
+  justify-self: end;
+}

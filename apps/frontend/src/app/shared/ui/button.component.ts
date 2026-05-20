@@ -3,6 +3,7 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 @Component({
   selector: 'app-button',
   standalone: true,
+  styleUrl: './button.component.css',
   template: `
     <button
       type="button"

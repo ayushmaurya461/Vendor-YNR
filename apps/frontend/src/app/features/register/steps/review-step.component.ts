@@ -4,6 +4,7 @@ import { FormGroup } from '@angular/forms';
 @Component({
   selector: 'app-review-step',
   standalone: true,
+  styleUrl: './review-step.component.css',
   template: `
     <article class="card">
       <p class="section-title">Review listing</p>

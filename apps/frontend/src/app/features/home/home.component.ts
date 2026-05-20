@@ -16,6 +16,7 @@ import type { VendorCategory } from '../../core/models/vendor.model';
 @Component({
   selector: 'app-home',
   standalone: true,
+  styleUrl: './home.component.css',
   imports: [SearchBarComponent, CategoryFilterComponent, VendorGridComponent],
   template: `
     <section class="view">

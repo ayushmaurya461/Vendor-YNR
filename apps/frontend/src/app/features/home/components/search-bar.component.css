@@ -1,0 +1,29 @@
+@import '../../../shared/ui/input.component.css';
+
+.search {
+  position: relative;
+  display: block;
+  width: 100%;
+  min-width: 0;
+}
+
+.search__icon {
+  position: absolute;
+  top: 50%;
+  left: var(--space-3);
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-xl);
+  line-height: 1;
+  color: var(--color-text-secondary);
+  pointer-events: none;
+  transform: translateY(-50%);
+}
+
+.search__input {
+  width: 100%;
+  min-width: 0;
+  padding-left: calc(var(--space-3) + var(--text-xl) + var(--space-3));
+}

@@ -1,0 +1,22 @@
+@import '../../shared/ui/muted.css';
+@import '../../shared/ui/card.component.css';
+@import '../../shared/ui/button.component.css';
+@import '../../shared/vendor/vendor-card.css';
+
+.stats {
+  display: grid;
+  gap: var(--space-3);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+@media (max-width: 767px) {
+  .stats {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (min-width: 768px) {
+  .stats {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
